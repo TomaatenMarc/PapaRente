@@ -19,6 +19,83 @@
 body {
   background: var(--theme-bg);
   color: var(--theme-text);
+  position: relative;
+}
+
+.bg-pattern {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+[data-theme='hotel'] .bg-pattern {
+  background:
+    radial-gradient(circle at 12% 18%, #ffffff 0, #ffffff00 2.6%),
+    radial-gradient(circle at 82% 12%, #ffffff 0, #ffffff00 1.8%),
+    radial-gradient(circle at 70% 32%, #ffffff 0, #ffffff00 1.2%),
+    radial-gradient(circle at 25% 55%, #ffffff 0, #ffffff00 2.2%),
+    radial-gradient(circle at 90% 60%, #ffffff 0, #ffffff00 1.6%),
+    radial-gradient(circle at 45% 80%, #ffffff 0, #ffffff00 2%),
+    radial-gradient(circle at 10% 92%, #ffffff 0, #ffffff00 1.4%),
+    radial-gradient(circle at 60% 95%, #ffffff 0, #ffffff00 1.8%),
+    radial-gradient(900px 600px at 15% 0%, var(--hotel-bg-deep) 0%, transparent 60%),
+    radial-gradient(900px 700px at 100% 40%, var(--hotel-bg-deep) 0%, transparent 55%),
+    radial-gradient(1000px 800px at 10% 100%, #cfe9e0aa 0%, transparent 60%);
+  opacity: 0.6;
+}
+
+[data-theme='wagon'] .bg-pattern {
+  background:
+    radial-gradient(circle at 15% 15%, #6b3f6b26 0 10px, transparent 11px),
+    radial-gradient(circle at 80% 10%, #6b3f6b22 0 8px, transparent 9px),
+    radial-gradient(circle at 60% 28%, #5c7a3a2e 0 7px, transparent 8px),
+    radial-gradient(circle at 20% 50%, #6b3f6b26 0 9px, transparent 10px),
+    radial-gradient(circle at 92% 55%, #5c7a3a2e 0 8px, transparent 9px),
+    radial-gradient(circle at 40% 75%, #6b3f6b22 0 10px, transparent 11px),
+    radial-gradient(circle at 8% 90%, #5c7a3a2e 0 8px, transparent 9px),
+    radial-gradient(circle at 70% 94%, #6b3f6b26 0 9px, transparent 10px),
+    radial-gradient(900px 600px at 85% 0%, var(--wagon-bg-deep) 0%, transparent 60%),
+    radial-gradient(900px 700px at 0% 45%, var(--wagon-bg-deep) 0%, transparent 55%),
+    radial-gradient(1000px 800px at 90% 100%, #efe0b2aa 0%, transparent 60%);
+  opacity: 0.7;
+}
+
+.back-link,
+.page-hero,
+main,
+.page-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.float-up-emoji {
+  position: fixed;
+  bottom: -10vh;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  animation-name: float-up;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120vh) translateX(20px) rotate(25deg);
+    opacity: 0;
+  }
 }
 
 .back-link {
@@ -63,7 +140,7 @@ body {
   position: relative;
   z-index: 2;
   color: #fff;
-  padding: 40px 20px 34px;
+  padding: 56px 20px 48px;
   width: 100%;
   text-align: center;
 }
@@ -93,16 +170,17 @@ body {
 }
 
 main {
-  padding-top: 42px;
+  padding-top: 68px;
+  padding-bottom: 20px;
 }
 
-main section + section {
-  margin-top: 56px;
+main .container + .container {
+  margin-top: 92px;
 }
 
 .intro-section .lead {
   font-size: 1.08rem;
-  line-height: 1.6;
+  line-height: 1.7;
   text-align: center;
   max-width: 62ch;
   margin: 0 auto;
@@ -111,7 +189,7 @@ main section + section {
 .info-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 20px;
 }
 
 @media (max-width: 700px) {
@@ -123,7 +201,7 @@ main section + section {
 .info-card {
   background: #fff;
   border-radius: 20px;
-  padding: 22px 20px;
+  padding: 30px 24px;
   box-shadow: var(--shadow-card);
   text-align: center;
 }
@@ -131,7 +209,7 @@ main section + section {
 .info-icon {
   font-size: 1.8rem;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .info-card h3 {
@@ -149,13 +227,13 @@ h2 {
   text-align: center;
   color: var(--theme-primary-dark);
   font-size: clamp(1.4rem, 3.2vw, 1.8rem);
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 18px;
 }
 
 .gallery-wide {
@@ -208,13 +286,13 @@ h2 {
   padding: 0;
   max-width: 620px;
   display: grid;
-  gap: 10px;
+  gap: 14px;
 }
 
 .highlights-list li {
   background: #fff;
   border-radius: 14px;
-  padding: 12px 16px;
+  padding: 16px 20px;
   font-size: 0.98rem;
   box-shadow: var(--shadow-card);
 }
@@ -224,7 +302,7 @@ h2 {
   font-size: 0.9rem;
   color: #6b6456;
   max-width: 54ch;
-  margin: 18px auto 0;
+  margin: 26px auto 0;
 }
 
 .game-section {
@@ -233,16 +311,16 @@ h2 {
 
 .game-section > p {
   max-width: 50ch;
-  margin: 0 auto 18px;
+  margin: 0 auto 26px;
 }
 
 .game-wrap {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
   background: #fff;
-  padding: 18px;
+  padding: 26px;
   border-radius: 24px;
   box-shadow: var(--shadow-soft);
 }
@@ -295,7 +373,7 @@ h2 {
 
 .more-info-section {
   text-align: center;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 }
 
 .external-link {
@@ -309,7 +387,7 @@ h2 {
 
 .page-footer {
   text-align: center;
-  padding: 30px 20px 50px;
+  padding: 40px 20px 60px;
 }
 
 .page-footer a {

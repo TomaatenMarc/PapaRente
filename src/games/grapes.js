@@ -5,6 +5,7 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
 
   const basket = { w: 70, h: 34, x: W / 2 - 35, y: H - 46 };
   let grapes = [];
+  let popups = [];
   let score = 0;
   let timeLeft = duration;
   let running = false;
@@ -12,16 +13,24 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
   let timerId = null;
   let spawnAcc = 0;
   let lastTs = 0;
-  let caught = [];
+  let elapsed = 0;
+
+  let idleItems = [];
+  let idleRafId = null;
+  let idleLastTs = 0;
+  let idleBasketT = 0;
 
   function spawnGrape() {
-    const r = 12 + Math.random() * 6;
+    const isTrash = Math.random() < 0.26;
+    const r = 11 + Math.random() * 6;
+    const speedBoost = Math.min(elapsed / duration, 1) * 60;
     grapes.push({
       x: r + Math.random() * (W - 2 * r),
       y: -r,
       r,
-      speed: 70 + Math.random() * 60,
+      speed: 90 + Math.random() * 60 + speedBoost,
       rot: Math.random() * Math.PI,
+      trash: isTrash,
     });
   }
 
@@ -42,8 +51,9 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
     ctx.stroke();
   }
 
-  function drawGrapeCluster(g) {
+  function drawGrapeCluster(g, forcedAlpha) {
     ctx.save();
+    ctx.globalAlpha = forcedAlpha ?? 1;
     ctx.translate(g.x, g.y);
     ctx.rotate(g.rot * 0.1);
     const circles = [
@@ -61,6 +71,34 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
       ctx.fill();
     });
     ctx.restore();
+  }
+
+  function drawTrash(g, forcedAlpha) {
+    ctx.save();
+    ctx.globalAlpha = forcedAlpha ?? 1;
+    ctx.translate(g.x, g.y);
+    ctx.rotate(g.rot);
+    ctx.fillStyle = '#6b5a3c';
+    ctx.beginPath();
+    ctx.moveTo(-g.r, 0);
+    ctx.quadraticCurveTo(-g.r * 0.3, -g.r * 0.9, g.r, 0);
+    ctx.quadraticCurveTo(g.r * 0.3, g.r * 0.9, -g.r, 0);
+    ctx.fill();
+    ctx.strokeStyle = '#4a3d29';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(-g.r * 0.8, 0);
+    ctx.lineTo(g.r * 0.8, 0);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawItem(g, forcedAlpha) {
+    if (g.trash) {
+      drawTrash(g, forcedAlpha);
+    } else {
+      drawGrapeCluster(g, forcedAlpha);
+    }
   }
 
   function drawBasket() {
@@ -83,6 +121,27 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
     ctx.restore();
   }
 
+  function drawPopups(dt) {
+    popups.forEach((p) => {
+      p.age += dt;
+      p.y -= 26 * dt;
+    });
+    popups = popups.filter((p) => p.age < 0.7);
+    popups.forEach((p) => {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, 1 - p.age / 0.7);
+      ctx.fillStyle = p.color;
+      ctx.font = '800 15px Nunito, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(p.text, p.x, p.y);
+      ctx.restore();
+    });
+  }
+
+  function addPopup(x, y, text, color) {
+    popups.push({ x, y, text, color, age: 0 });
+  }
+
   function drawEndState(label) {
     ctx.fillStyle = 'rgba(63, 88, 38, 0.6)';
     ctx.fillRect(0, 0, W, H);
@@ -91,16 +150,18 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
     ctx.font = '700 22px Fredoka, sans-serif';
     ctx.fillText(label, W / 2, H / 2 - 10);
     ctx.font = '600 16px Nunito, sans-serif';
-    ctx.fillText(`${score} Trauben gesammelt 🍇`, W / 2, H / 2 + 20);
+    ctx.fillText(`${score} Punkte 🍇`, W / 2, H / 2 + 20);
   }
 
   function tick(ts) {
     if (!running) return;
     const dt = lastTs ? (ts - lastTs) / 1000 : 0;
     lastTs = ts;
+    elapsed += dt;
 
     spawnAcc += dt;
-    if (spawnAcc > 0.7) {
+    const spawnEvery = Math.max(0.32, 0.62 - elapsed * 0.012);
+    if (spawnAcc > spawnEvery) {
       spawnAcc = 0;
       spawnGrape();
     }
@@ -118,15 +179,22 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
         g.x >= basket.x - g.r &&
         g.x <= basket.x + basket.w + g.r;
       if (hitBasket) {
-        score++;
+        if (g.trash) {
+          score = Math.max(0, score - 1);
+          addPopup(g.x, basket.y, '-1', '#c0392b');
+        } else {
+          score++;
+          addPopup(g.x, basket.y, '+1', '#3f5826');
+        }
         scoreEl.textContent = score;
         return false;
       }
       return g.y - g.r < H;
     });
 
-    grapes.forEach(drawGrapeCluster);
+    grapes.forEach((g) => drawItem(g));
     drawBasket();
+    drawPopups(dt);
 
     rafId = requestAnimationFrame(tick);
   }
@@ -165,10 +233,13 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
   }
 
   function start() {
+    cancelAnimationFrame(idleRafId);
     cancelAnimationFrame(rafId);
     clearInterval(timerId);
     grapes = [];
+    popups = [];
     score = 0;
+    elapsed = 0;
     scoreEl.textContent = '0';
     basket.x = W / 2 - basket.w / 2;
     running = true;
@@ -179,8 +250,54 @@ export function initGrapeGame({ canvas, scoreEl, timeEl, startBtn, duration = 30
     rafId = requestAnimationFrame(tick);
   }
 
-  drawBackground();
-  drawBasket();
+  function spawnIdleItem() {
+    const r = 10 + Math.random() * 7;
+    idleItems.push({
+      x: r + Math.random() * (W - 2 * r),
+      y: -r - Math.random() * H,
+      r,
+      speed: 18 + Math.random() * 16,
+      rot: Math.random() * Math.PI,
+      trash: Math.random() < 0.2,
+    });
+  }
+
+  function idleTick(ts) {
+    if (running) return;
+    const dt = idleLastTs ? (ts - idleLastTs) / 1000 : 0;
+    idleLastTs = ts;
+    idleBasketT += dt;
+
+    drawBackground();
+
+    idleItems.forEach((g) => {
+      g.y += g.speed * dt;
+      if (g.y - g.r > H) {
+        g.y = -g.r;
+        g.x = g.r + Math.random() * (W - 2 * g.r);
+      }
+      drawItem(g, 0.35);
+    });
+
+    basket.x = W / 2 - basket.w / 2 + Math.sin(idleBasketT * 1.4) * 40;
+    drawBasket();
+
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#3f5826cc';
+    ctx.font = '700 16px Fredoka, sans-serif';
+    ctx.fillText('Bereit?', W / 2, H / 2 - 24);
+    ctx.font = '600 13px Nunito, sans-serif';
+    ctx.fillStyle = '#3f5826aa';
+    ctx.fillText('Tippe auf „Spiel starten“', W / 2, H / 2 - 2);
+    ctx.restore();
+
+    idleRafId = requestAnimationFrame(idleTick);
+  }
+
+  for (let i = 0; i < 6; i++) spawnIdleItem();
+  idleRafId = requestAnimationFrame(idleTick);
+
   canvas.addEventListener('mousemove', handleMove);
   canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
