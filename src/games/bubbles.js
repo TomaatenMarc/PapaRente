@@ -166,23 +166,33 @@ export function initBubbleGame({ canvas, scoreEl, timeEl, startBtn, duration = 3
     const x = (clientX - rect.left) * scaleX;
     const y = (clientY - rect.top) * scaleY;
 
+    // Großzügige Trefferzone: Finger/Maus müssen nicht pixelgenau treffen.
+    const forgiveness = (evt.touches ? 16 : 12) * scaleX;
+
+    let best = null;
+    let bestScore = Infinity;
     for (let i = bubbles.length - 1; i >= 0; i--) {
       const b = bubbles[i];
       if (b.popped) continue;
+      const hitR = b.r + forgiveness;
       const d = Math.hypot(b.x - x, b.y - y);
-      if (d <= b.r) {
-        b.popped = true;
-        b.popT = 0;
-        if (b.bad) {
-          score = Math.max(0, score - 1);
-          addPopup(b.x, b.y, '-1', '#c0392b');
-        } else {
-          score++;
-          addPopup(b.x, b.y, '+1', '#1f7a68');
-        }
-        scoreEl.textContent = score;
-        break;
+      if (d <= hitR && d < bestScore) {
+        best = b;
+        bestScore = d;
       }
+    }
+
+    if (best) {
+      best.popped = true;
+      best.popT = 0;
+      if (best.bad) {
+        score = Math.max(0, score - 1);
+        addPopup(best.x, best.y, '-1', '#c0392b');
+      } else {
+        score++;
+        addPopup(best.x, best.y, '+1', '#1f7a68');
+      }
+      scoreEl.textContent = score;
     }
   }
 
