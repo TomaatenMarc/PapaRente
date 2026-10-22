@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Planwagentour durch die Weinberge</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="/src/planwagen.css" />
+</head>
+<body data-theme="wagon">
+  <a class="back-link" href="/index.html">← Zurück</a>
+
+  <header class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('/images/planwagen/hero.jpg')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="pill">Für dich</span>
+      <h1>Planwagentour<br />durch die Weinberge</h1>
+      <p class="hero-dates">🗓️ Termin steht noch nicht fest – wird gemeinsam geplant</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="container intro-section">
+      <p class="lead">
+        Mit einem historischen Unimog-Oldtimer-Gespann geht es mitten durch
+        die steilen Weinberge der Mosel – vorbei an Traben-Trarbach, mit
+        Panoramablick ins Tal. Danach wartet eine Kellerführung samt
+        Weinprobe. Die "Wein-Wissen-Entdecker-Tour" zeigt dir, wie an der
+        Mosel Wein entsteht – zum Anfassen, Riechen und natürlich Probieren.
+      </p>
+    </section>
+
+    <section class="container info-grid">
+      <div class="info-card">
+        <span class="info-icon">📍</span>
+        <h3>Startort</h3>
+        <p>Weingut C.A. Haussmann<br />Bernkasteler Weg 15<br />56841 Traben-Trarbach</p>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">⏱️</span>
+        <h3>Dauer</h3>
+        <p>Ca. 4 Stunden<br />2,5 Std. Planwagenfahrt + 1,5 Std. Kellerführung</p>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">🍷</span>
+        <h3>Weinproben</h3>
+        <p>6 Weinproben insgesamt – 3 in den Weinbergen, 3 im Keller.</p>
+      </div>
+    </section>
+
+    <section class="container gallery-section">
+      <h2>Was dich erwartet</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item gallery-wide">
+          <img src="/images/planwagen/hero.jpg" alt="Unimog-Gespann zwischen den Weinreben mit Blick auf Traben-Trarbach" loading="lazy" />
+          <figcaption>Fahrt mitten durch die Weinberge</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img src="/images/planwagen/g5.jpg" alt="Historischer Weinkeller mit Holzfässern" loading="lazy" />
+          <figcaption>Historischer Fasskeller</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img src="/images/planwagen/g3.jpg" alt="Weinprobe im Keller des Weinguts" loading="lazy" />
+          <figcaption>Weinprobe im Weingut</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img src="/images/planwagen/g4.jpg" alt="Glas Riesling auf einem Tisch im Weingut" loading="lazy" />
+          <figcaption>Riesling von der Mosel</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="container highlights-section">
+      <h2>Highlights der Tour</h2>
+      <ul class="highlights-list">
+        <li>🚜 Fahrt im historischen Unimog-Oldtimer-Gespann</li>
+        <li>🍇 Einblicke in die Arbeit im Weinberg ("im Wingert")</li>
+        <li>🏞️ Panoramablick ins Moseltal</li>
+        <li>🪵 Besichtigung von Fass- und Flaschenkeller</li>
+        <li>🍷 6 Weinproben in Weinberg &amp; Keller</li>
+        <li>📖 Spannendes zu Kultur &amp; Landschaft der Moselregion</li>
+      </ul>
+      <p class="note">Die Tour findet April bis November donnerstags, freitags und samstags statt – den genauen Termin sprechen wir gemeinsam ab, sobald es bei dir passt.</p>
+    </section>
+
+    <section class="container game-section">
+      <h2>Kleine Spielerei zum Einstimmen 🍇</h2>
+      <p>Schon mal die Lese üben: Fang die fallenden Trauben mit dem Korb, bevor die Zeit abläuft!</p>
+      <div class="game-wrap">
+        <canvas id="grape-game" width="360" height="420"></canvas>
+        <div class="game-ui">
+          <div class="game-stat">Punkte: <span id="grape-score">0</span></div>
+          <div class="game-stat">Zeit: <span id="grape-time">30</span>s</div>
+          <button id="grape-start" class="game-btn">Spiel starten</button>
+        </div>
+        <p class="game-hint">Steuerung: Korb mit Maus / Finger bewegen</p>
+      </div>
+    </section>
+
+    <section class="container more-info-section">
+      <h2>Mehr erfahren</h2>
+      <p>Alle Details zur Tour findet ihr bei der Moselregion.</p>
+      <a class="external-link" href="https://www.moselregion.com/poi/wein-wissen-entdecker-tour-1" target="_blank" rel="noopener">moselregion.com ↗</a>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <a href="/index.html">← Zurück zur Übersicht</a>
+  </footer>
+
+  <script type="module" src="/src/planwagen.js"></script>
+</body>
+</html>

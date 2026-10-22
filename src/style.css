@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --font-display: 'Fredoka', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+
+  --hotel-bg: #eaf5f1;
+  --hotel-bg-deep: #cfe9e0;
+  --hotel-primary: #1f7a68;
+  --hotel-primary-dark: #145a4d;
+  --hotel-accent: #f3b96f;
+  --hotel-text: #163c34;
+
+  --wagon-bg: #faf1da;
+  --wagon-bg-deep: #efe0b2;
+  --wagon-primary: #5c7a3a;
+  --wagon-primary-dark: #3f5826;
+  --wagon-accent: #a24b6f;
+  --wagon-text: #3a3113;
+
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  margin: 0 0 0.4em;
+  line-height: 1.15;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
